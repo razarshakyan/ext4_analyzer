@@ -10,7 +10,7 @@ if [ -z $2 ]; then
     start_dir="/";
 fi
 if [ -z $3 ]; then
-    artifact="inodes";
+    artifact="write_inode";
 fi
 
 sudo setfacl -m u:${USER}:r $filesystem
