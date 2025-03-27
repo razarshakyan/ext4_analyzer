@@ -17,21 +17,21 @@ fn write_inode_into_dir(mut device: std::fs::File) {
     let super_block = ext4::SuperBlock::new(&mut device).unwrap();
     let root = super_block.root().unwrap();
 
-    super_block.walk(&root, "", &mut |fs, path, inode, enhanced| {
-        if ctr == 5 {
+    super_block.walk(&root, "", &mut |fs, _path, inode, _| {
+        if 30 == ctr {
             return Ok(false);
         }
 
-        ctr += 1;
-        println!(
-            "<{}> {}: {:?} {:?}",
-            inode.number, path, enhanced, inode.stat
-        );
-
-        if inode.stat.extracted_type == ext4::FileType::RegularFile {
+        if ext4::FileType::RegularFile == inode.stat.extracted_type {
+            ctr += 1;
+            /* Debug Messages */
+            //println!("----Regular file Entered----");
+            //println!("----Path Of The File {}----", path);
+            //println!("----Inode Number {}----", inode.number);
             if let Ok(file) = fs.open(&inode) {
                 let mut reader = BufReader::new(file);
                 let output_file = File::create(format!("inode_output_{}.txt", inode.number))?;
+ 
                 let mut writer = BufWriter::new(output_file);
 
                 let mut buffer = [0u8; 4096];
@@ -47,7 +47,7 @@ fn write_inode_into_dir(mut device: std::fs::File) {
             }
         }
 
-        Ok(true) // Return true to continue the walk.
+        Ok(true)
     }).unwrap_or_else(|err| {
         eprintln!("Error during walk: {:?}", err);
         false
@@ -98,7 +98,6 @@ fn main() {
 
     let device =
         std::fs::File::open(fs_path.as_str()).unwrap();
-    println!("device : {:?}", device);
 
     match artifact.to_lowercase().as_str() {
         "inodes" => extract_inode_info(device, start_dir),
