@@ -1,9 +1,14 @@
 [package]
-name = "ext4_parser"
+name = "view_tst"
 version = "0.1.0"
 edition = "2021"
+build = "build.rs"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[toolchain]
+channel = "1.81.0"
+
+[features]
+windows = []
 
 [dependencies]
-ext4 = "0.9.0"
+ext4-view = { version = "0.9.1", features = ["std"] }
