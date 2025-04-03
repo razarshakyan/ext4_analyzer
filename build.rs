@@ -12,6 +12,15 @@ fn main() {
         _ => "stable",
     };
 
+    let prepare_build = Command::new("bash")
+        .arg("prepare_build.sh")
+        .status()
+        .expect("Failed to execute prepare_build.sh");
+    if !prepare_build.success() {
+        panic!("prepare_build.sh failed");
+    }
+    println!("prepare_build succeeded");
+
     let output = Command::new("rustc")
         .arg("--version")
         .output()
