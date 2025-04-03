@@ -4,11 +4,8 @@ version = "0.1.0"
 edition = "2021"
 build = "build.rs"
 
-[toolchain]
-channel = "1.81.0"
-
 [features]
 windows = []
 
-[dependencies]
+[target.'cfg(unix)'.dependencies]
 ext4-view = { version = "0.9.1", features = ["std"] }
