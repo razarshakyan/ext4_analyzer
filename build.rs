@@ -1,7 +1,7 @@
 use std::process::Command;
 
 fn main() {
-    println!("cargo:rerun-if-changed=build.rs")
+    println!("cargo:rerun-if-changed=build.rs");
 
     let target = std::env::var("CARGO_CFG_TARGET_OS").unwrap();
     println!("target OS {}", target.as_str());
